@@ -75,7 +75,7 @@ app.get('/restaurants/:restaurant_id/edit', (req, res) => {
 })
 
 //更新餐廳
-app.post("/restaurants/:restaurant_id/edit", (req, res) => {
+app.post('/restaurants/:restaurant_id/edit', (req, res) => {
   const { restaurant_id } = req.params
   const newUserData = req.body
   return Restaurant.findById(restaurant_id)
@@ -85,6 +85,15 @@ app.post("/restaurants/:restaurant_id/edit", (req, res) => {
     })
     .then(() => res.redirect(`/restaurants/${restaurant_id}`))
     .catch(err => console.log(err))
+})
+
+//刪除餐廳
+app.post('/restaurant/:restaurant_id/delete', (req, res) => {
+  const { restaurant_id } = req.params
+  return Restaurant.findById(restaurant_id)
+    .then(restaurant => restaurant.remove())
+    .then(() => res.redirect('/'))
+    .catch((error) => console.log(error))
 })
 
 //querystring
