@@ -1,0 +1,69 @@
+<h1 class="mb-1 restaurant-show-title">編輯餐廳 - {{restaurantData.name}}</h1>
+<div class="container">
+  <form action="/restaurants/{{restaurantData._id}}/edit" method="POST">
+    <div class="mb-3">
+      <label for="name" class="form-label">店名<span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="name" placeholder="Alpha 科技餐廳" name="name"
+        value="{{restaurantData.name}}" required />
+    </div>
+    <div class="mb-3">
+      <label for="name_en" class="form-label">英文店名<span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="name_en" placeholder="Alpha Tech Theme Restaurant" name="name_en"
+        value="{{restaurantData.name_en}}" required />
+    </div>
+    <div class="mb-3">
+      <label for="category" class="form-label">分類<span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="category" placeholder="美式" list="categoryOptions" name="category"
+        value="{{restaurantData.category}}" required />
+      {{! 使用datalist，讓使用者可選擇或自行輸入 }}
+      <datalist id="categoryOptions">
+        <option>美式</option>
+        <option>咖啡</option>
+        <option>中東料理</option>
+        <option>日本料理</option>
+        <option>義式餐廳</option>
+      </datalist>
+    </div>
+    <div class="mb-3">
+      <label for="image" class="form-label">圖片連結<span class="text-danger">*</span></label>
+      <input type="url" class="form-control" id="image" name="image" value="{{restaurantData.image}}" required />
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">地址<span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="location" placeholder="台中市北屯區迷有這條路520號" name="location"
+        value="{{restaurantData.location}}" required />
+    </div>
+    <div class="mb-3">
+      <label for="phone" class="form-label">電話<span class="text-danger">*</span></label>
+      <input type="tel" class="form-control" id="phone" placeholder="04-23456789" name="phone"
+        value="{{restaurantData.phone}}" required />
+    </div>
+    <div class="mb-3">
+      <label for="google_map" class="form-label">Google地圖連結<span class="text-danger">*</span></label>
+      <input type="url" class="form-control" id="google_map" name="google_map" value="{{restaurantData.google_map}}"
+        required />
+    </div>
+    <div class="mb-3">
+      <label for="rating" class="form-label">評分<span class="text-danger">*</span></label>
+      <input type="number" class="form-control" id="rating" min="0" max="5" step="0.1" name="rating"
+        value="{{restaurantData.rating}}" required />
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">敘述<span class="text-danger">*</span></label>
+      <textarea class="form-control" id="description" rows="3" name="description"
+        required>{{restaurantData.description}}</textarea>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">
+        儲存修改
+      </button>
+      <a href="/">
+        <button type="button" class="btn btn-outline-secondary">
+          返回首頁
+        </button>
+      </a>
+      {{! 使用type="reset" 可以清除/還原輸入 }}
+      <button type="reset" class="btn btn-outline-danger">還原輸入</button>
+    </div>
+  </form>
+</div>
