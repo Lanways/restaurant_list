@@ -38,10 +38,12 @@ app.get('/', (req, res) => {
     .then(restaurantData => res.render('index', { restaurantData }))
     .catch(err => console.log(error))
 })
+
 // 新增餐廳頁面
 app.get('/restaurants/new', (req, res) => {
   res.render('new')
 })
+
 // 新增餐廳
 app.post('/restaurants', (req, res) => {
   console.log(req.body)
@@ -64,6 +66,7 @@ app.get('/restaurants/:restaurant_id', (req, res) => {
   // })
   // res.render('show', { restaurant })
 })
+
 // 編輯餐廳頁面
 app.get('/restaurants/:restaurant_id/edit', (req, res) => {
   const { restaurant_id } = req.params
@@ -96,14 +99,33 @@ app.post('/restaurant/:restaurant_id/delete', (req, res) => {
     .catch((error) => console.log(error))
 })
 
-//querystring
+//querystring 尋找餐廳
 app.get("/search", (req, res) => {
-  console.log("req keyword", req.query.keyword)
-  const restaurants = restaurantList.results.filter((restaurant) => {
-    return restaurant.name.toLowerCase().includes(req.query.keyword.toLowerCase())
-  })
-  res.render('index', { restaurants, keyword: req.query.keyword })
+  if (!req.query.keyword) {
+    res.redirect("/")
+  }
+  console.log('req.query', req.query)
+  const keywords = req.query.keyword
+  const keyword = req.query.keyword.trim().toLowerCase()
+
+  Restaurant.find({})
+    .lean()
+    .then(restaurantData => {
+      const filterRestaurantData = restaurantData.filter(
+        data =>
+          data.name.toLowerCase().includes(keyword) ||
+          data.category.includes(keyword)
+      )
+      res.render("index", { restaurantData: filterRestaurantData, keywords })
+    })
+    .catch(err => console.log(err))
+  // console.log("req keyword", req.query.keyword)
+  // const restaurants = restaurantList.results.filter((restaurant) => {
+  //   return restaurant.name.toLowerCase().includes(req.query.keyword.toLowerCase())
+  // })
+  // res.render('index', { restaurants, keyword: req.query.keyword })
 })
+
 //監聽並啟動伺服器
 app.listen(port, () => {
   console.log(`Express is running on http://localhost:${port}`)
