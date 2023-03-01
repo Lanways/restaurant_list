@@ -5,6 +5,7 @@ const app = express()
 const port = 3000
 const exphbs = require('express-handlebars')
 const restaurantList = require('./restaurant.json')
+const Restaurant = require('./models/Restaurant')
 
 // 僅在非正式環境時, 使用 dotenv
 if (process.env.NODE_ENV !== 'production') {
@@ -28,9 +29,12 @@ app.use(express.static('public'))
 
 
 
-//render partial template
+//render partial template 瀏覽全部餐廳
 app.get('/', (req, res) => {
-  res.render('index', { restaurants: restaurantList.results })
+  Restaurant.find() // 取出 Restaurant model 裡的所有資料
+    .lean() //把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
+    .then(restaurantData => res.render('index', { restaurantData }))
+    .catch(err => console.log(error))
 })
 //show page
 app.get('/restaurants/:restaurant_id', (req, res) => {
