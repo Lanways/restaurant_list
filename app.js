@@ -50,14 +50,19 @@ app.post('/restaurants', (req, res) => {
     .catch(err => console.log(error))
 })
 
-//show page
+//show page 瀏覽特定餐廳
 app.get('/restaurants/:restaurant_id', (req, res) => {
-  console.log('restaurant_id', req.params.restaurant_id)
-  const restaurant = restaurantList.results.find((restaurant) => {
-    return restaurant.id === Number(req.params.restaurant_id)
-  })
-  console.log(restaurant)
-  res.render('show', { restaurant })
+  // const {變量} = 解構賦值（destructuring assignment）
+  const { restaurant_id } = req.params
+  console.log(req.params)
+  Restaurant.findById(restaurant_id)
+    .lean()
+    .then(restaurantData => res.render('show', { restaurantData }))
+    .catch(err => console.log(err))
+  // const restaurant = restaurantList.results.find((restaurant) => {
+  //   return restaurant.id === Number(req.params.restaurant_id)
+  // })
+  // res.render('show', { restaurant })
 })
 
 //querystring

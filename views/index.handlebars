@@ -41,6 +41,7 @@
             </span>
           </div>
           <div class="card-footer d-flex justify-content-end flex-wrap">
+            {{!-- 在 Mongoose 裡使用 _id 來表示每筆資料的唯一識別碼;16 進位的流水號 --}}
             <a href="/restaurants/{{this._id}}/edit"><button class="btn btn-link btn-sm">Edit</button></a>
             <a href="/restaurants/{{this._id}}"><button class="btn btn-link btn-sm">Details</button></a>
             <form action="/restaurant/{{this._id}}?_method=DELETE" method="POST">
