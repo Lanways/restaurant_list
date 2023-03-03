@@ -8,6 +8,7 @@ const restaurantList = require('./restaurant.json')
 const Restaurant = require('./models/Restaurant')
 // 載入bodyparser
 const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
 // 僅在非正式環境時, 使用 dotenv
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
@@ -29,7 +30,7 @@ app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
-
+app.use(methodOverride('_method'))
 
 //render partial template 瀏覽全部餐廳
 app.get('/', (req, res) => {
@@ -78,7 +79,7 @@ app.get('/restaurants/:restaurant_id/edit', (req, res) => {
 })
 
 //更新餐廳
-app.post('/restaurants/:restaurant_id/edit', (req, res) => {
+app.put('/restaurants/:restaurant_id', (req, res) => {
   const { restaurant_id } = req.params
   const newUserData = req.body
   return Restaurant.findById(restaurant_id)
@@ -91,7 +92,7 @@ app.post('/restaurants/:restaurant_id/edit', (req, res) => {
 })
 
 //刪除餐廳
-app.post('/restaurant/:restaurant_id/delete', (req, res) => {
+app.delete('/restaurant/:restaurant_id', (req, res) => {
   const { restaurant_id } = req.params
   return Restaurant.findById(restaurant_id)
     .then(restaurant => restaurant.remove())
