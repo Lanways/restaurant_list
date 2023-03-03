@@ -62,31 +62,4 @@ router.delete('/:restaurant_id', (req, res) => {
     .catch((error) => console.log(error))
 })
 
-//querystring 尋找餐廳
-router.get("/search", (req, res) => {
-  if (!req.query.keyword) {
-    res.redirect("/")
-  }
-  console.log('req.query', req.query)
-  const keywords = req.query.keyword
-  const keyword = req.query.keyword.trim().toLowerCase()
-
-  Restaurant.find({})
-    .lean()
-    .then(restaurantData => {
-      const filterRestaurantData = restaurantData.filter(
-        data =>
-          data.name.toLowerCase().includes(keyword) ||
-          data.category.includes(keyword)
-      )
-      res.render("index", { restaurantData: filterRestaurantData, keywords })
-    })
-    .catch(err => console.log(err))
-  // console.log("req keyword", req.query.keyword)
-  // const restaurants = restaurantList.results.filter((restaurant) => {
-  //   return restaurant.name.toLowerCase().includes(req.query.keyword.toLowerCase())
-  // })
-  // res.render('index', { restaurants, keyword: req.query.keyword })
-})
-
 module.exports = router

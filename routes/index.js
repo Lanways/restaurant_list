@@ -5,5 +5,4 @@ const restaurants = require('./modules/restaurants')
 
 router.use('/', home)
 router.use('/restaurants', restaurants)
-
 module.exports = router
