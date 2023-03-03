@@ -9,6 +9,7 @@ const Restaurant = require('./models/Restaurant')
 // 載入bodyparser
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
+const routes = require('./routes')
 // 僅在非正式環境時, 使用 dotenv
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
@@ -31,101 +32,10 @@ app.use(express.static('public'))
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+app.use(routes)
 
-//render partial template 瀏覽全部餐廳
-app.get('/', (req, res) => {
-  Restaurant.find() // 取出 Restaurant model 裡的所有資料
-    .lean() //把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
-    .then(restaurantData => res.render('index', { restaurantData }))
-    .catch(err => console.log(error))
-})
 
-// 新增餐廳頁面
-app.get('/restaurants/new', (req, res) => {
-  res.render('new')
-})
 
-// 新增餐廳
-app.post('/restaurants', (req, res) => {
-  console.log(req.body)
-  Restaurant.create(req.body)
-    .then(() => res.redirect('/'))
-    .catch(err => console.log(error))
-})
-
-//show page 瀏覽特定餐廳
-app.get('/restaurants/:restaurant_id', (req, res) => {
-  // const {變量} = 解構賦值（destructuring assignment）
-  const { restaurant_id } = req.params
-  console.log(req.params)
-  Restaurant.findById(restaurant_id)
-    .lean()
-    .then(restaurantData => res.render('show', { restaurantData }))
-    .catch(err => console.log(err))
-  // const restaurant = restaurantList.results.find((restaurant) => {
-  //   return restaurant.id === Number(req.params.restaurant_id)
-  // })
-  // res.render('show', { restaurant })
-})
-
-// 編輯餐廳頁面
-app.get('/restaurants/:restaurant_id/edit', (req, res) => {
-  const { restaurant_id } = req.params
-  console.log(req.params)
-  Restaurant.findById(restaurant_id)
-    .lean()
-    .then(restaurantData => res.render('edit', { restaurantData }))
-    .catch(err => console.log(err))
-})
-
-//更新餐廳
-app.put('/restaurants/:restaurant_id', (req, res) => {
-  const { restaurant_id } = req.params
-  const newUserData = req.body
-  return Restaurant.findById(restaurant_id)
-    .then((restaurant) => {
-      restaurant.set(newUserData)
-      return restaurant.save()
-    })
-    .then(() => res.redirect(`/restaurants/${restaurant_id}`))
-    .catch(err => console.log(err))
-})
-
-//刪除餐廳
-app.delete('/restaurant/:restaurant_id', (req, res) => {
-  const { restaurant_id } = req.params
-  return Restaurant.findById(restaurant_id)
-    .then(restaurant => restaurant.remove())
-    .then(() => res.redirect('/'))
-    .catch((error) => console.log(error))
-})
-
-//querystring 尋找餐廳
-app.get("/search", (req, res) => {
-  if (!req.query.keyword) {
-    res.redirect("/")
-  }
-  console.log('req.query', req.query)
-  const keywords = req.query.keyword
-  const keyword = req.query.keyword.trim().toLowerCase()
-
-  Restaurant.find({})
-    .lean()
-    .then(restaurantData => {
-      const filterRestaurantData = restaurantData.filter(
-        data =>
-          data.name.toLowerCase().includes(keyword) ||
-          data.category.includes(keyword)
-      )
-      res.render("index", { restaurantData: filterRestaurantData, keywords })
-    })
-    .catch(err => console.log(err))
-  // console.log("req keyword", req.query.keyword)
-  // const restaurants = restaurantList.results.filter((restaurant) => {
-  //   return restaurant.name.toLowerCase().includes(req.query.keyword.toLowerCase())
-  // })
-  // res.render('index', { restaurants, keyword: req.query.keyword })
-})
 
 //監聽並啟動伺服器
 app.listen(port, () => {
