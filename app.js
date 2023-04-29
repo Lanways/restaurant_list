@@ -5,7 +5,9 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const methodOverride = require('method-override')
+const usePassport = require('./config/passport')
 const routes = require('./routes')
+
 require('./config/mongoose')
 
 if (process.env.NODE_ENV !== 'production') {
@@ -15,7 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 
-app.use(session({ 
+app.use(session({
   secret: 'ThisMySecret',
   resave: 'false',
   saveUninitialized: true
@@ -24,6 +26,9 @@ app.use(session({
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true })) //每一筆請求都需要透過 body-parser 進行前置處理
 app.use(methodOverride('_method'))
+
+usePassport(app)
+
 app.use(routes)
 
 app.listen(port, () => {
