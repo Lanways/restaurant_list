@@ -1,0 +1,8 @@
+module.exports = {
+  authenticator: (req, res, next) => {
+    if (req.isAuthenticated()) { //Passport函式 回傳true/false
+      return next()
+    }
+    res.redirect('/users/login')
+  }
+}
