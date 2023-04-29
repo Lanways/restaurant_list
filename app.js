@@ -29,6 +29,13 @@ app.use(methodOverride('_method'))
 
 usePassport(app)
 
+//locals是express幫我們開的一條捷徑，裡面的資料所有view都可以存取
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user
+  next()
+})
+
 app.use(routes)
 
 app.listen(port, () => {

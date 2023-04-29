@@ -4,6 +4,7 @@ const Restaurant = require('../../models/Restaurant')
 
 // 新增餐廳頁面
 router.get('/new', (req, res) => {
+  
   res.render('new')
 })
 
