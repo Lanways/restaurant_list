@@ -11,17 +11,17 @@ module.exports = app => {
   //使用 LocalStrategy 進行驗證
   passport.use(new LocalStrategy(
     //default username change to email
-    { usernameField: 'email' }, (email, password, done) => {
+    { usernameField: 'email', passReqToCallback: true }, (req, email, password, done) => {
       User.findOne({ email })
         .then(user => {
           // mail search
           if (!user) {
-            return done(null, false, { message: 'That email is not registered!' })
+            return done(null, false, req.flash('warning_msg', 'That email is not registered!'))
           }
           // 將使用者輸入的password經過雜湊後去資料庫做比對
           return bcrypt.compare(password, user.password).then(isMatch => {
             if (!isMatch) {
-              return done(null, false, { message: 'Email or Password incorrect.' })
+              return done(null, false, req.flash('warning_msg', 'Email or Password incorrect.'))
             }
             // authenticate success 返回user資料
             return done(null, user)
