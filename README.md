@@ -14,6 +14,8 @@
 - 新增餐廳
 - 編輯餐廳
 - 刪除餐廳
+- 註冊帳號、登入、登出
+- 第三方登入 Facebook login
 
 ## 開始使用
 
@@ -42,6 +44,11 @@
    ```bash
    ctrl + c
    ```
+7. 製作種子資料
+
+   ```bash
+   npm run seed
+   ```
 
 ## 開發工具
 
@@ -51,4 +58,13 @@
 - Bootstrap 5.1.3
 - Font-awesome 6.3.0
 - MogoDB
-- mongoose 6.0.5
+- mongoose 5.9.7
+- bcryptjs": "^2.4.3",
+- body-parser": "^1.20.2",
+- connect-flash": "^0.1.1",
+- express-session": "^1.17.1",
+- method-override": "^3.0.0",
+- passport": "^0.4.1",
+- passport-facebook": "^3.0.0",
+- passport-local": "^1.0.0"
+- dotenv": "^16.0.3"
